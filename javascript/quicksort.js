@@ -1,6 +1,5 @@
 const assert = require('assert');
 
-let i = 0;
 function quickSort(list) {
   if (list.length <= 1) return list;
 
