@@ -27,7 +27,7 @@ function merge(left, right) {
     if (lVal === null || lVal === undefined || (rVal && rVal < lVal)) {
       result.push(rVal);
       rPtr += 1;
-    } else if (rVal === null || rVal === undefined || (lVal && lVal < rVal)) {
+    } else if (rVal === null || rVal === undefined || (lVal && lVal <= rVal)) {
       result.push(lVal);
       lPtr += 1;
     }
@@ -40,11 +40,11 @@ function test() {
   assert.deepEqual(mergeSort([]), []);
   assert.deepEqual(mergeSort([0]), [0]);
   assert.deepEqual(mergeSort([2, 1]), [1, 2]);
-  // assert.deepEqual(mergeSort([3, 2, 1]), [1, 2, 3]);
-  // assert.deepEqual(
-  //   mergeSort([9, 1, 2, 6, 7, 8, 10, 11, 23, 90, 5, 9]),
-  //   [1, 2, 5, 6, 7, 8, 9, 9, 10, 11, 23, 90]
-  // );
+  assert.deepEqual(mergeSort([3, 2, 1]), [1, 2, 3]);
+  assert.deepEqual(
+    mergeSort([9, 1, 2, 6, 7, 8, 10, 11, 23, 90, 5, 9]),
+    [1, 2, 5, 6, 7, 8, 9, 9, 10, 11, 23, 90]
+  );
   console.log('all tests pass!');
 }
 
