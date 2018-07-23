@@ -2,9 +2,8 @@ import unittest
 
 class Graph:
 
-    def __init__(self):
-        self.vertices = {"start": {"a": 6, "b": 2}, "a": {"fin": 1},
-                        "b": {"a": 3, "fin": 5}, "fin": {}}
+    def __init__(self, vertices):
+        self.vertices = vertices
 
     def find_shortest_path(self, start, end):
         cost_table = {n: float("inf") for n in self.vertices.keys()}
@@ -42,9 +41,18 @@ class Graph:
 class TestDijkstra(unittest.TestCase):
 
     def test_whee(self):
-        g = Graph()
+        v = {"start": {"a": 6, "b": 2}, "a": {"fin": 1},
+            "b": {"a": 3, "fin": 5}, "fin": {}}
+        g = Graph(v)
         path = g.find_shortest_path("start", "fin")
         self.assertEqual(path, ["start", "b", "a", "fin"])
+
+    def test_woo(self):
+        v = {"start": {"a": 5, "c": 2}, "a": {"b": 4, "d": 2},
+            "b": {"d": 6, "fin": 3}, "c": {"a": , "d"}, "d": {"fin"}}
+        g = Graph(v)
+        path = g.find_shortest_path("start", "fin")
+        self.assertEqual(path, ["start", "a", "d", "fin"])
 
 if __name__ == "__main__":
     unittest.main()
