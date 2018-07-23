@@ -1,7 +1,11 @@
 #[cfg(test)]
 
-fn quicksort(arr: Vec<u32>) -> Vec<u32> {
-    arr
+fn quicksort(mut arr: &Vec<u32>){
+
+}
+
+fn quicksort_helper(mut arr: &Vec<u32>) {
+
 }
 
 mod test {
@@ -9,20 +13,23 @@ mod test {
 
     #[test]
     fn empty_vec() {
-        let arr = Vec::new();
-        assert_eq!(quicksort(arr), vec![]);
+        let mut arr = Vec::new();
+        quicksort(&arr);
+        assert_eq!(arr, vec![]);
     }
 
     #[test]
     fn one_item() {
-        let arr = vec![1];
-        assert_eq!(quicksort(arr), vec![1]);
+        let mut arr = vec![1];
+        quicksort(&arr);
+        assert_eq!(arr, vec![1]);
     }
 
     #[test]
     fn reverse() {
-        let arr = vec![5, 4, 2, 0];
-        assert_eq!(quicksort(arr), vec![0, 2, 4, 5]);
+        let mut arr = vec![5, 4, 2, 0];
+        quicksort(&arr);
+        assert_eq!(arr, vec![0, 2, 4, 5]);
     }
 
 }
