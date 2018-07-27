@@ -10,12 +10,12 @@ class Graph:
     return v.neighbors
 
   def parents(self, target):
-    return set([vertex for vertex in self.vertices 
+    return set([vertex for vertex in self.vertices
                 if self.adjacent(vertex, target)])
 
   def add_vertex(self, v):
     self.vertices.add(v)
-  
+
   def remove_vertext(self, v):
     self.vertices.remove(v)
 
@@ -27,7 +27,7 @@ class Graph:
   def remove_edge(self, v1, v2):
     if not v1 in self.vertices or not v2 in self.vertices:
       return None
-    
+
     v1.neighbors.remove(v2)
 
   def get_vertex_value(self, v):
@@ -42,7 +42,7 @@ class Vertex:
     self.neighbors = neighbors
     self.traversed = False
     self.parents = []
-  
+
   def traverse(self):
     self.traversed = True
 
