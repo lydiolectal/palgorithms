@@ -171,6 +171,35 @@ def count_unival_trees(root):
 # Follow-up: Can you do this in O(N) time and constant space?
 # straightforward dynamic programming approach.
 
+# linear time and linear space
+def largest_nonadjacent_sum(l):
+    size = len(l)
+    sums = [0] * size
+    # handle edge cases of 0, 1 indices
+    if size <= 2:
+        return max(l)
+    sums[0], sums[1] = l[0], max(l[0], l[1])
+
+    for i in range(2, size):
+        prev = sums[i - 1]
+        curr = sums[i - 2] + l[i]
+        sums[i] = max(prev, curr)
+
+    return sums[size - 1]
+
+# linear time and constant space
+def largest_nonadjacent_sum_efficient(l):
+    size = len(l)
+    if size <= 2:
+        return max(l)
+
+    prev_prev, prev = l[0], max(l[:2])
+    for num in l[2:]:
+        new = max(prev, prev_prev + num)
+        prev_prev = prev
+        prev = new
+    return prev
+
 class TestDailies(unittest.TestCase):
 
     def test_1(self):
@@ -248,4 +277,36 @@ class TestDailies(unittest.TestCase):
 
         result = count_unival_trees(root)
         expected = 5
+        self.assertEqual(result, expected)
+
+    def test_9(self):
+        l = [2, 4, 6, 2, 5]
+        result = largest_nonadjacent_sum(l)
+        expected = 13
+        self.assertEqual(result, expected)
+
+        l = [5, 1, 1, 5]
+        result = largest_nonadjacent_sum(l)
+        expected = 10
+        self.assertEqual(result, expected)
+
+        l = [6, 4, -3, 2, 5]
+        result = largest_nonadjacent_sum(l)
+        expected = 11
+        self.assertEqual(result, expected)
+
+    def test_9_efficient(self):
+        l = [2, 4, 6, 2, 5]
+        result = largest_nonadjacent_sum_efficient(l)
+        expected = 13
+        self.assertEqual(result, expected)
+
+        l = [5, 1, 1, 5]
+        result = largest_nonadjacent_sum_efficient(l)
+        expected = 10
+        self.assertEqual(result, expected)
+
+        l = [6, 4, -3, 2, 5]
+        result = largest_nonadjacent_sum_efficient(l)
+        expected = 11
         self.assertEqual(result, expected)
