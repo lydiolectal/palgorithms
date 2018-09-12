@@ -1,4 +1,5 @@
 import unittest
+import functools
 
 # Day 1
 # Given a list of numbers and a number k, return whether any two numbers
@@ -27,6 +28,14 @@ def add_to_k(l, k):
 # be [2, 3, 6].
 #
 # Follow-up: what if you can't use division?
+
+def arr_product(l):
+    total_prod = functools.reduce(lambda x, y: x * y, l)
+    new_l = list(map(lambda x: total_prod // x, l))
+    return new_l
+
+# TODO: constrained version.
+
 
 # Day 4
 # Given an array of integers, find the first missing positive integer in
@@ -200,10 +209,107 @@ def largest_nonadjacent_sum_efficient(l):
         prev = new
     return prev
 
+# Day 10
+# Implement a job scheduler which takes in a function f and an integer n,
+# and calls f after n milliseconds.
+# TODO: check if this is even right?
+
+def schedule_job(f, n):
+    time.sleep(n/1000)
+    f()
+
+# Day 11
+# Implement an autocomplete system. That is, given a query string s and a set of
+# all possible query strings, return all strings in the set that have s as a
+# prefix.
+#
+# For example, given the query string de and the set of strings [dog, deer,
+# deal], return [deer, deal].
+#
+# Hint: Try preprocessing the dictionary into a more efficient data structure to
+# speed up queries.
+
+class TrieNode:
+
+    def __init__(self):
+        self.children = {}
+        self.words = []
+
+    def insert(self, word, i):
+        if i < len(word):
+            cur = word[i]
+            self.words.append(word)
+            if cur not in self.children:
+                self.children[cur] = TrieNode()
+            self.children[cur].insert(word, i + 1)
+        else:
+            self.words.append(word)
+
+def insert_list(root, l):
+    for word in l:
+        root.insert(word, 0)
+
+def autocomplete(s, words):
+    root = TrieNode()
+    insert_list(root, words)
+
+    cur_node = root
+    for c in s:
+        if c in cur_node.children:
+            cur_node = cur_node.children[c]
+        else:
+            return []
+
+    return cur_node.words
+
+# Day 12
+#
+# There exists a staircase with N steps, and you can climb up either 1 or 2
+# steps at a time. Given N, write a function that returns the number of unique
+# ways you can climb the staircase. The order of the steps matters.
+#
+# For example, if N is 4, then there are 5 unique ways:
+# 1, 1, 1, 1
+# 2, 1, 1
+# 1, 2, 1
+# 1, 1, 2
+# 2, 2
+# What if, instead of being able to climb 1 or 2 steps at a time, you could
+# climb any number from a set of positive integers X? For example, if X =
+# {1, 3, 5}, you could climb 1, 3, or 5 steps at a time.
+
+def climb(n):
+    ways = [0] * (n + 1)
+    def helper(n):
+        if ways[n]:
+            return ways[n]
+        if n <= 2:
+            ways[n] = n
+            return n
+
+        way = helper(n - 1) + helper(n - 2)
+        ways[n] = way
+        return way
+
+    helper(n)
+    return ways[n]
+
+def climb_extended(n, steps):
+    pass
+
+# Day 13
+
+# Given an integer k and a string s, find the length of the longest substring
+# that contains at most k distinct characters.
+
+# For example, given s = "abcba" and k = 2, the longest substring with k
+# distinct characters is "bcb".
+def longest_substring(k, s):
+    pass
+
 class TestDailies(unittest.TestCase):
 
     def test_1(self):
-
         l = [10, 15, 3, 7]
         k = 17
         result = add_to_k(l, k)
@@ -213,6 +319,12 @@ class TestDailies(unittest.TestCase):
         k = 11
         result = add_to_k(l, k)
         self.assertFalse(result)
+
+    def test_2(self):
+        l = [1, 2, 3, 4, 5]
+        result = arr_product(l)
+        expected = [120, 60, 40, 30, 24]
+        self.assertEqual(result, expected)
 
     def test_4(self):
         arr = [3, 4, 1, -1]
@@ -309,4 +421,16 @@ class TestDailies(unittest.TestCase):
         l = [6, 4, -3, 2, 5]
         result = largest_nonadjacent_sum_efficient(l)
         expected = 11
+        self.assertEqual(result, expected)
+
+    def test_10(self):
+        s = "de"
+        words = ["deer", "deal", "dog"]
+        result = autocomplete(s, words)
+        expected = ["deer", "deal"]
+        self.assertEqual(result, expected)
+
+    def test_12(self):
+        result = climb(4)
+        expected = 5
         self.assertEqual(result, expected)
