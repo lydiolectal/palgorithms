@@ -18,6 +18,6 @@ if __name__ == "__main__":
     print(f.__next__())
     print(f.__next__())
 
-    x = addOne(5)
-    print(x.__next__())
-    print(x.__next__())
+    # x = addOne(5)
+    # print(x.__next__())
+    # print(x.__next__())

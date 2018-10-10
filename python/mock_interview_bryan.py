@@ -59,3 +59,105 @@ def contains(board, target):
                 return True
 
     return False
+
+# doggy
+# alabs
+# yogdg
+# saalb
+
+# out: [[doggy, yogdg], [alabs, saalb]]
+
+# sorted(s)
+
+def group_anagrams(arr):
+    anagram_groupings = {}
+    for s in arr:
+        sorted_s = sorted(s)
+        if sorted_s in anagram_groupings:
+            anagram_groupings[sorted_s].append(s)
+        else:
+            anagram_groupings[sorted_s] = [s]
+
+    return [anagram_groupings[k] for k in anagram_groupings.keys()]
+
+#n = 3
+
+#[
+#  "((()))",
+#  "(()())",
+#  "(())()",
+#  "()(())",
+#  "()()()"
+#]
+
+def valid_parens(n):
+    nestings = []
+
+    def valid_parens_helper(s, oparens, parens_left):
+        if oparens == 0 and parens_left == 0:
+            nestings.append(s)
+        if oparens > 0:
+            valid_parens_helper(s + ")", oparens - 1, parens_left)
+        if parens_left > 0:
+            valid_parens_helper(s + "(", oparens + 1, parens_left - 1)
+
+    valid_parens_helper("", 0, n)
+    return nestings
+
+class Solution:
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        PARENS = []
+
+        def create_parens(p_str, num_opens, num_closed, balance):
+            if balance < 0 or num_opens < 0 or num_closed < 0:
+                return
+            if num_opens == 0 and num_closed == 0 and balance == 0:
+                PARENS.append(p_str)
+                return
+            create_parens(p_str + "(", num_opens-1, num_closed, balance+1)
+            create_parens(p_str + ")", num_opens, num_closed-1, balance-1)
+
+        create_parens("", n, n, 0)
+        return PARENS
+
+# https://leetcode.com/problems/unique-paths/description/
+#
+
+# row x col
+# 2 x 3
+
+# 2,3 2,2 2,1
+# 1,3 1,2 1,1
+
+# 1 1 1
+# 1 2 3
+
+def unique_paths(m, n):
+
+    paths = 0
+    def get_paths(m, n):
+        nonlocal paths
+        if m == 1 and n == 1:
+            paths += 1
+        if m > 1:
+            get_paths(m - 1, n)
+        if n > 1:
+            get_paths(m, n - 1)
+
+    get_paths(m, n)
+    return paths
+
+# memo[i][j] = memo[i-1][j] + memo[i][j-1]
+def unique_paths(m, n):
+    memo = [[1 for _ in range(m)] for _ in range(n)]
+    if m == 1 or n == 1:
+        return 1
+    for r in range(1, n):
+        for c in range(1, m):
+            memo[r][c] = memo[r - 1][c] + memo[r][c - 1]
+
+    return memo[-1][-1]
