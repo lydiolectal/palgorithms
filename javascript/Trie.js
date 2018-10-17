@@ -33,6 +33,8 @@ class Trie {
       if (!(currChar in currNode.children)) {
         const newNode = new TrieNode(currChar, isEndOfWord);
         currNode.children[currChar] = newNode;
+      } else if (isEndOfWord) {
+        currNode.children[currChar].isEndOfWord = true;
       }
 
       currNode = currNode.children[currChar];
@@ -45,7 +47,19 @@ class Trie {
    * @return {boolean}
    */
   search(word) {
+    let currNode = this.root;
 
+    for (let i = 0; i < word.length; i++) {
+      const currChar = word[i];
+
+      if (currChar in currNode.children) {
+        currNode = currNode.children[currChar];
+      } else {
+        return false;
+      }
+    }
+
+    return currNode.isEndOfWord;
   }
 
   /**
@@ -54,17 +68,34 @@ class Trie {
    * @return {boolean}
    */
   startsWith(prefix) {
+    let currNode = this.root;
 
+    for (let i = 0; i < prefix.length; i++) {
+      const currChar = prefix[i];
+
+      if (currChar in currNode.children) {
+        currNode = currNode.children[currChar];
+      } else {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 
 function test() {
   const trie = new Trie();
-
   trie.insert('abc');
   trie.insert('ade');
   trie.insert('def');
-  console.log(JSON.stringify(trie));
+  // console.log(JSON.stringify(trie));
+
+  assert.equal(trie.search('abc'), true);
+  assert.equal(trie.search('abcd'), false);
+
+  assert.equal(trie.startsWith('ab'), true);
+  assert.equal(trie.startsWith('g'), false);
   console.log('all tests pass');
 }
 
